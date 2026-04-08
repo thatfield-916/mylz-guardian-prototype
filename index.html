@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyLZ Guardian — Prototype</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- ========== TOP NAV ========== -->
+  <header class="top-nav">
+    <div class="nav-left">
+      <div class="logo">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#0F4C81"/><text x="5" y="20" fill="white" font-size="16" font-weight="700" font-family="Inter">LZ</text></svg>
+        <span class="logo-text">MyLegalZoom</span>
+      </div>
+      <nav class="centers-nav" id="centersNav">
+        <button class="center-tab active" data-center="home">Home</button>
+        <button class="center-tab" data-center="compliance">Compliance</button>
+        <button class="center-tab" data-center="employees">Employees</button>
+        <button class="center-tab" data-center="growth">Growth</button>
+        <button class="center-tab" data-center="documents">Documents</button>
+      </nav>
+    </div>
+    <div class="nav-right">
+      <button class="nav-icon-btn" id="searchToggle" title="Search & AI Assistant">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <button class="nav-icon-btn notification-bell" id="notifToggle" title="Notifications">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-badge" id="notifBadge">5</span>
+      </button>
+      <button class="nav-icon-btn expert-btn" id="expertBtn" title="Talk to an Expert">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="expert-label">Expert</span>
+      </button>
+      <div class="user-avatar" id="userMenu">TH</div>
+    </div>
+  </header>
+
+  <!-- ========== SEARCH / AI OVERLAY ========== -->
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-container">
+      <div class="search-header">
+        <div class="search-input-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="searchInput" placeholder="Search documents, tasks, or ask a question..." autocomplete="off">
+          <div class="search-mode-toggle">
+            <button class="mode-btn active" data-mode="search">Search</button>
+            <button class="mode-btn" data-mode="ai">AI Assistant</button>
+          </div>
+        </div>
+        <button class="close-btn" id="searchClose">&times;</button>
+      </div>
+      <div class="search-results" id="searchResults">
+        <div class="search-category">
+          <h4>Recent</h4>
+          <div class="search-item"><span class="si-icon doc"></span>Articles of Organization — California LLC<span class="si-type">Document</span></div>
+          <div class="search-item"><span class="si-icon task"></span>File Annual Report — Due Apr 15<span class="si-type">Task</span></div>
+          <div class="search-item"><span class="si-icon help"></span>How to add a registered agent<span class="si-type">Help</span></div>
+        </div>
+      </div>
+      <div class="ai-chat hidden" id="aiChat">
+        <div class="ai-messages" id="aiMessages">
+          <div class="ai-msg bot">
+            <div class="ai-avatar">AI</div>
+            <div class="ai-bubble">Hi! I'm your LegalZoom AI Assistant. I can help with compliance questions, document status, and next steps for your business. <em>Note: I'm an AI — for legal advice, connect with a human attorney.</em></div>
+          </div>
+        </div>
+        <div class="ai-input-wrap">
+          <input type="text" id="aiInput" placeholder="Ask anything... (e.g., 'Am I compliant?')">
+          <button class="ai-send" id="aiSend">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== NOTIFICATION PANEL ========== -->
+  <div class="notif-panel" id="notifPanel">
+    <div class="notif-header">
+      <h3>Notifications</h3>
+      <button class="notif-pref-btn" id="notifPrefBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Preferences
+      </button>
+    </div>
+    <div class="notif-filters">
+      <button class="nf-btn active" data-filter="all">All</button>
+      <button class="nf-btn" data-filter="deadlines">Deadlines</button>
+      <button class="nf-btn" data-filter="changes">Changes</button>
+      <button class="nf-btn" data-filter="milestones">Milestones</button>
+    </div>
+    <div class="notif-list" id="notifList"></div>
+
+    <!-- Preferences sub-panel -->
+    <div class="notif-prefs hidden" id="notifPrefs">
+      <h4>Notification Preferences</h4>
+      <label class="pref-toggle"><input type="checkbox" checked> Compliance deadlines<span class="pref-ch">Email, In-app</span></label>
+      <label class="pref-toggle"><input type="checkbox" checked> Annual report reminders<span class="pref-ch">Email, SMS, In-app</span></label>
+      <label class="pref-toggle"><input type="checkbox" checked> Business changes & milestones<span class="pref-ch">In-app</span></label>
+      <label class="pref-toggle"><input type="checkbox" checked> Product recommendations<span class="pref-ch">Email</span></label>
+      <label class="pref-toggle"><input type="checkbox"> Marketing & promotions<span class="pref-ch">Email</span></label>
+      <button class="btn-secondary" id="prefBack">Back to Notifications</button>
+    </div>
+  </div>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main class="main-content">
+
+    <!-- HOME CENTER (default) -->
+    <section class="center-view active" id="view-home">
+      <!-- Guardian Status Banner -->
+      <div class="guardian-banner">
+        <div class="gb-left">
+          <h1>Good morning, Tim</h1>
+          <p class="gb-sub">Your business is <span class="status-pill at-risk">At Risk</span> &mdash; 2 items need attention</p>
+        </div>
+        <div class="gb-right">
+          <div class="guardian-score">
+            <div class="score-ring" id="scoreRing">
+              <svg viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="52" stroke="#e8ecf0" stroke-width="10" fill="none"/>
+                <circle cx="60" cy="60" r="52" stroke="#0F4C81" stroke-width="10" fill="none" stroke-dasharray="327" stroke-dashoffset="98" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+              </svg>
+              <span class="score-num">70</span>
+            </div>
+            <span class="score-label">Guardian Score</span>
+            <span class="score-check">Last checked: 2 hours ago</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Check-ins & Recommendations (#5) -->
+      <div class="checkin-section">
+        <h2 class="section-title">Check-in</h2>
+        <div class="checkin-cards" id="checkinCards">
+          <!-- JS populated -->
+        </div>
+      </div>
+
+      <!-- Smart Actions (#1) -->
+      <div class="smart-actions-section">
+        <h2 class="section-title">Smart Actions</h2>
+        <div class="action-tabs">
+          <button class="at-btn active" data-urgency="now">Now <span class="at-count" id="nowCount">2</span></button>
+          <button class="at-btn" data-urgency="soon">Soon <span class="at-count" id="soonCount">3</span></button>
+          <button class="at-btn" data-urgency="watchlist">Watchlist <span class="at-count" id="watchCount">2</span></button>
+        </div>
+        <div class="actions-list" id="actionsList">
+          <!-- JS populated -->
+        </div>
+      </div>
+
+      <!-- Risk Report (#2) -->
+      <div class="risk-report-section">
+        <h2 class="section-title">Risk Report</h2>
+        <div class="risk-domains" id="riskDomains">
+          <!-- JS populated -->
+        </div>
+      </div>
+
+      <!-- Lifecycle Journey (#6) -->
+      <div class="lifecycle-section">
+        <h2 class="section-title">Your Journey</h2>
+        <div class="lifecycle-timeline" id="lifecycleTimeline">
+          <!-- JS populated -->
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPLIANCE CENTER -->
+    <section class="center-view" id="view-compliance">
+      <div class="center-hero compliance-hero">
+        <h1>Compliance Center</h1>
+        <p>Stay compliant across all your entities. Monitor filings, deadlines, and regulatory changes.</p>
+      </div>
+      <div class="compliance-grid">
+        <div class="comp-card">
+          <div class="cc-status good">Good Standing</div>
+          <h3>Hatfield Consulting LLC</h3>
+          <p>California &bull; Formed Jan 2024</p>
+          <div class="cc-items">
+            <div class="cci done">Statement of Information &mdash; Filed Mar 2026</div>
+            <div class="cci warn">Annual Report &mdash; Due Apr 15, 2026</div>
+            <div class="cci done">Registered Agent &mdash; Active</div>
+          </div>
+          <button class="btn-primary">View Details</button>
+        </div>
+        <div class="comp-card">
+          <div class="cc-status risk">Action Required</div>
+          <h3>TH Ventures Inc</h3>
+          <p>Delaware &bull; Formed Sep 2023</p>
+          <div class="cc-items">
+            <div class="cci danger">Franchise Tax &mdash; Overdue</div>
+            <div class="cci warn">Annual Report &mdash; Due Jun 1, 2026</div>
+            <div class="cci done">Registered Agent &mdash; Active</div>
+          </div>
+          <button class="btn-primary">Take Action</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- EMPLOYEES CENTER -->
+    <section class="center-view" id="view-employees">
+      <div class="center-hero employees-hero">
+        <h1>Employees Center</h1>
+        <p>Manage hiring, compliance, and employer obligations as your team grows.</p>
+      </div>
+      <div class="emp-dashboard">
+        <div class="emp-stat-card">
+          <span class="emp-num">3</span>
+          <span class="emp-label">Active Employees</span>
+        </div>
+        <div class="emp-stat-card warn">
+          <span class="emp-num">1</span>
+          <span class="emp-label">Classification Review Needed</span>
+        </div>
+        <div class="emp-stat-card">
+          <span class="emp-num">0</span>
+          <span class="emp-label">Upcoming Deadlines</span>
+        </div>
+      </div>
+      <div class="emp-actions">
+        <h3>Recommended Actions</h3>
+        <div class="emp-action-item">
+          <span class="eai-icon">&#9888;</span>
+          <div>
+            <strong>Review contractor classification</strong>
+            <p>You added a new contractor last month. Misclassification can result in penalties up to $25,000. <a href="#">Review now</a></p>
+          </div>
+        </div>
+        <div class="emp-action-item">
+          <span class="eai-icon new">&#43;</span>
+          <div>
+            <strong>Set up employer compliance</strong>
+            <p>With 3 employees in CA, you may need to register for state unemployment insurance. <a href="#">Learn more</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GROWTH CENTER -->
+    <section class="center-view" id="view-growth">
+      <div class="center-hero growth-hero">
+        <h1>Growth Center</h1>
+        <p>Tools and insights to help your business grow — from credit monitoring to strategic planning.</p>
+      </div>
+      <div class="growth-cards">
+        <div class="growth-card">
+          <h3>Business Credit Score</h3>
+          <div class="credit-score">
+            <span class="cs-num">72</span><span class="cs-label">/100</span>
+          </div>
+          <p>Good — You're building business credit. Keep paying invoices on time.</p>
+          <button class="btn-secondary">View Full Report</button>
+        </div>
+        <div class="growth-card">
+          <h3>Funding Readiness</h3>
+          <p>Based on your profile, you may qualify for SBA microloans. Complete your business profile to see more options.</p>
+          <button class="btn-secondary">Explore Funding</button>
+        </div>
+        <div class="growth-card">
+          <h3>Partner Recommendations</h3>
+          <p>Insurance, accounting, and banking partners matched to your business type and state.</p>
+          <button class="btn-secondary">Browse Partners</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOCUMENTS CENTER -->
+    <section class="center-view" id="view-documents">
+      <div class="center-hero documents-hero">
+        <h1>Documents Center</h1>
+        <p>All your business documents in one place — formation papers, filings, contracts, and more.</p>
+      </div>
+      <div class="doc-list">
+        <div class="doc-item"><span class="di-icon">&#128196;</span><div><strong>Articles of Organization</strong><p>Hatfield Consulting LLC &bull; Filed Jan 15, 2024</p></div><button class="btn-sm">View</button></div>
+        <div class="doc-item"><span class="di-icon">&#128196;</span><div><strong>Operating Agreement</strong><p>Hatfield Consulting LLC &bull; Created Jan 15, 2024</p></div><button class="btn-sm">View</button></div>
+        <div class="doc-item"><span class="di-icon">&#128196;</span><div><strong>EIN Confirmation Letter</strong><p>IRS &bull; Received Jan 22, 2024</p></div><button class="btn-sm">View</button></div>
+        <div class="doc-item"><span class="di-icon">&#128196;</span><div><strong>Statement of Information</strong><p>California &bull; Filed Mar 1, 2026</p></div><button class="btn-sm">View</button></div>
+        <div class="doc-item"><span class="di-icon">&#128221;</span><div><strong>Contractor Agreement — J. Smith</strong><p>Created Feb 10, 2026</p></div><button class="btn-sm">View</button></div>
+        <div class="doc-item"><span class="di-icon">&#128221;</span><div><strong>Meeting Minutes — Q1 2026</strong><p>Auto-generated Mar 15, 2026</p></div><button class="btn-sm">View</button></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========== POST-ACTION MODAL (#4) ========== -->
+  <div class="modal-overlay hidden" id="postActionModal">
+    <div class="modal-content celebration">
+      <div class="confetti-burst" id="confetti"></div>
+      <div class="celeb-icon">&#127881;</div>
+      <h2>Annual Report Filed!</h2>
+      <p class="celeb-sub">Great job — you just protected your business standing in California.</p>
+      <div class="what-you-have">
+        <h4>What You Now Have</h4>
+        <ul>
+          <li><span class="check">&#10003;</span> California Annual Report — Filed Apr 8, 2026</li>
+          <li><span class="check">&#10003;</span> Good Standing status maintained</li>
+          <li><span class="check">&#10003;</span> Next filing due: Apr 2027</li>
+        </ul>
+      </div>
+      <div class="order-track">
+        <h4>Order Tracking</h4>
+        <div class="track-steps">
+          <div class="track-step done"><span class="ts-dot"></span>Submitted</div>
+          <div class="track-step done"><span class="ts-dot"></span>Processing</div>
+          <div class="track-step active"><span class="ts-dot"></span>Filed with State</div>
+          <div class="track-step"><span class="ts-dot"></span>Confirmed</div>
+        </div>
+      </div>
+      <div class="celeb-actions">
+        <button class="btn-primary" onclick="closeModal()">Back to Dashboard</button>
+        <button class="btn-secondary" onclick="closeModal()">View in Documents</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== EXPERT PANEL ========== -->
+  <div class="expert-panel hidden" id="expertPanel">
+    <div class="ep-header">
+      <h3>Connect with an Expert</h3>
+      <button class="close-btn" id="expertClose">&times;</button>
+    </div>
+    <div class="ep-options">
+      <div class="ep-option">
+        <div class="ep-icon">&#128172;</div>
+        <div>
+          <strong>Chat with Concierge</strong>
+          <p>Get personalized guidance from your dedicated business advisor.</p>
+        </div>
+        <button class="btn-primary btn-sm">Start Chat</button>
+      </div>
+      <div class="ep-option">
+        <div class="ep-icon">&#128222;</div>
+        <div>
+          <strong>Schedule a Call</strong>
+          <p>Book a 15-minute call with a Business Advisory Plan attorney.</p>
+        </div>
+        <button class="btn-secondary btn-sm">Book Call</button>
+      </div>
+      <div class="ep-option">
+        <div class="ep-icon">&#9878;</div>
+        <div>
+          <strong>Talk to an Attorney</strong>
+          <p>For legal questions — connect with a licensed attorney in your state.</p>
+        </div>
+        <button class="btn-secondary btn-sm">Find Attorney</button>
+      </div>
+    </div>
+    <p class="ep-disclaimer"><em>AI vs Human: Our AI assistant can help with general questions. For legal advice, always consult a licensed attorney.</em></p>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
